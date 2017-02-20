@@ -64,6 +64,13 @@ typedef struct {
 } EHEADER;
 
 /*-----------------------------------------------------------------------------*/
+//prototype
+void decode(char * filename);
+
+//main function
+void sphenix_tile(const char *filename){
+  decode((char*)filename);
+}
 
 void decode(char *filename) {
    THEADER th;
@@ -77,6 +84,8 @@ void decode(char *filename) {
    int i, j, ch, n, chn_index;
    double t1, t2, dt;
 
+
+   printf("%ld", sizeof(eh));
    // open the binary waveform file
    FILE *f = fopen(Form("%s", filename), "r");
    if (f == NULL) {
@@ -86,7 +95,7 @@ void decode(char *filename) {
 
    //open the root file
    strcpy(rootfile, filename);
-   //if (strchr(rootfile, '.'))*strchr(rootfile, '.') == 0;
+   if (strchr(rootfile, '.'))*strchr(rootfile, '.') == 0;
    strcat(rootfile, ".root");
    TFile *outfile = new TFile(rootfile, "RECREATE");
    
@@ -132,15 +141,15 @@ void decode(char *filename) {
 
    // loop over 10000 events in data file
   
-   cout << sizeof(eh) << endl;
-   /*
+   
+   
    for (n=0 ; n<10 ; n++) {
       // read event header
       i = fread(&eh, sizeof(eh), 1, f);
       if (i < 1)
          break;
 
-      if (n%100 == 0) {
+      if (n%1 == 0) {
 	printf("Found event #%d ", eh.event_serial_number);
 	printf("  %d", eh.year);
 	printf("/%d", eh.month);
@@ -278,5 +287,5 @@ void decode(char *filename) {
    
    
    //outfile->Close();
-   */
+   
 }
