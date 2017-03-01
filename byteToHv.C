@@ -9,7 +9,7 @@
 
 using namespace std;
 
-int bytetohv(double byte, int channel)
+int byteToHv(double byte, int channel)
 {
   // check to see if byte is a natural number between 1 and 255
   if(byte != floor(byte) || byte < 1 || byte > 255)

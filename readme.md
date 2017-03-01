@@ -49,3 +49,23 @@ Then to draw any of the
 ```cpp
 g1_adc->Draw()
 ```
+
+## High Voltage Conversion Macros
+Two files are included to convert from volts to bytes and back. To use them, open root and load them. 
+
+```bash 
+root -l
+root [0] .L hvToByte.C
+root [1] hvToByte(68.84,2)
+The byte for 68.84 volts is 28 which yields 68.8392 volts.
+```
+
+```bash
+root -l
+root [0] .L byteToHv.C 
+root [1] byteToHv(221,4)
+The voltage attained by setting the byte to 221 is 65.3908 volts +/- 0.0058%
+(int) 0
+``` 
+
+
