@@ -1,7 +1,7 @@
 .vscode
 *.dat
 *.root
-*.C~
 *.d
 *.so
 *.pcm
+*~
