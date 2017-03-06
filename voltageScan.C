@@ -75,12 +75,12 @@ typedef struct {
 /*-----------------------------------------------------------------------------*/
 
 // Prototypes
-void decode(char* filename);
+void decode(char* filename, int usr_duration);
 time_t printEvent(EHEADER eh);
 
 // Main function, should be named after filename
-void voltageScan(const char* filename) {
-  decode((char*)filename);
+void voltageScan(const char* filename, int usr_duration) {
+  decode((char*)filename, usr_duration);
 }
 
 time_t printEvent(EHEADER eh){
@@ -99,7 +99,7 @@ time_t printEvent(EHEADER eh){
   return rawTime;
 }
 
-void decode(char* filename) {
+void decode(char* filename,int usr_duration) {
   THEADER th;
   EHEADER eh;
   char hdr[4];
@@ -110,6 +110,7 @@ void decode(char* filename) {
   double t1, t2, dt;
   time_t start;
   time_t end;
+  float duration=0;
   
   
   // open the binary waveform file
@@ -139,39 +140,84 @@ void decode(char* filename) {
 
   // loop over events in data file
   bool firstEvent = 0;
-  while(1){
-    // read event header
-    i = fread(&eh, sizeof(eh), 1, f);
-    if (i < 1)
-      break;
-    if(firstEvent == 0)
-      {
-        start = printEvent(eh);
-	firstEvent = 1;
-      }
-
-    // reach channel data
-    for (ch = 0; ch < 5; ch++) {
-      i = fread(hdr, sizeof(hdr), 1, f);
+  if(usr_duration == 0){
+    while(1){
+      // read event header
+      i = fread(&eh, sizeof(eh), 1, f);
       if (i < 1)
-        break;
-      if (hdr[0] != 'C') {
-        // event header found
-        fseek(f, -4, SEEK_CUR);
-        break;
+	break;
+      if(firstEvent == 0)
+	{
+	  start = printEvent(eh);
+	  firstEvent = 1;
+	}
+
+      // reach channel data
+      for (ch = 0; ch < 5; ch++) {
+	i = fread(hdr, sizeof(hdr), 1, f);
+	if (i < 1)
+	  break;
+	if (hdr[0] != 'C') {
+	  // event header found
+	  fseek(f, -4, SEEK_CUR);
+	  break;
+	}
+	chn_index = hdr[3] - '0' - 1;
+	fread(voltage, sizeof(short), 1024, f);  
       }
-      chn_index = hdr[3] - '0' - 1;
-      fread(voltage, sizeof(short), 1024, f);  
-    }
     
+    }
+    end = printEvent(eh);
+    duration = difftime(end,start)/3600;
+    printf("%d events in %f hours yields %f events per hour.\n",
+	   eh.event_serial_number,
+	   duration,
+	   eh.event_serial_number/duration);
   }
-  end = printEvent(eh);
-  float duration = difftime(end,start)/3600;
-  printf("%d events in %f hours yields %f events per hour.\n",
-	 eh.event_serial_number,
-	 duration,
-	 eh.event_serial_number/duration);
-}
+ else
+   {
+     while(duration < usr_duration + 1)
+       {
+	 // read event header
+	 i = fread(&eh, sizeof(eh), 1, f);
+	 if (i < 1)
+	   break;
+	 if(firstEvent == 0)
+	   {
+	     start = printEvent(eh);
+	     firstEvent = 1;
+	   }
+
+	 // reach channel data
+	 for (ch = 0; ch < 5; ch++) {
+	   i = fread(hdr, sizeof(hdr), 1, f);
+	   if (i < 1)
+	     break;
+	   if (hdr[0] != 'C') {
+	     // event header found
+	     fseek(f, -4, SEEK_CUR);
+	     break;
+	   }
+	   chn_index = hdr[3] - '0' - 1;
+	   fread(voltage, sizeof(short), 1024, f);  
+	 }
+    
+       
+	 end = printEvent(eh);
+	 duration = difftime(end,start);
+       }
+     duration = duration/3600;
+     printf("%d events in %f hours yields %f events per hour.\n",
+	    eh.event_serial_number,
+	    duration,
+	    eh.event_serial_number/duration);
+   }
+}	 
+  
+	 
+   
+	 
+	 
 
 
 
