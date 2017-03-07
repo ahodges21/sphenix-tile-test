@@ -1,18 +1,18 @@
 #!/bin/bash
 mkdir /data1/voltageScan_4hr
 cd /data1/voltageScan_4hr
-mkdir baseline-69500mV
+mkdir baseline-68700mV
 
 #initialize all channels to same voltage for beginning of test and take baseline test 
-curl -X POST 192.168.10.213/api/hardware/modules/2/set-voltage?voltage=69.5
+curl -X POST 192.168.10.213/api/hardware/modules/2/set-voltage?voltage=68.7
 echo
-curl -X POST 192.168.10.213/api/hardware/modules/3/set-voltage?voltage=69.5
+curl -X POST 192.168.10.213/api/hardware/modules/3/set-voltage?voltage=68.7
 echo
-curl -X POST 192.168.10.213/api/hardware/modules/4/set-voltage?voltage=69.5
+curl -X POST 192.168.10.213/api/hardware/modules/4/set-voltage?voltage=68.7
 echo
-curl -X POST 192.168.10.213/api/hardware/modules/14/set-voltage?voltage=69.5
+curl -X POST 192.168.10.213/api/hardware/modules/14/set-voltage?voltage=68.7
 echo
-~/drsLog/drsLog 5.0 0.45 60.0 R AND 11110 0.05 0.05 0.05 0.05 1000000 14400 ./baseline-69500mV > baseline-69500mV/drs4.log
+~/drsLog/drsLog 5.0 0.45 60.0 R AND 11110 0.05 0.05 0.05 0.05 1000000 14400 ./baseline-68700mV > baseline-68700mV/drs4.log
 
 			    
 
@@ -20,7 +20,7 @@ echo
 for i in {1..4}
 do
     offset=0
-    runVoltage=66500
+    runVoltage=67100
     let titleVoltage=$runVoltage
      
     
@@ -41,9 +41,9 @@ do
     then
 	gpio=14
     fi
-    for k in {0..9}
+    for k in {0..8}
     do
-	offset=$(expr ${k} \* 300)
+	offset=$(expr ${k} \* 200)
 	let titleVoltage=$(expr ${runVoltage} + ${offset})
         curlVoltage=$(echo "scale = 3;  $titleVoltage / 1000"| bc) 
 	mkdir CH${i}-${titleVoltage}mV
