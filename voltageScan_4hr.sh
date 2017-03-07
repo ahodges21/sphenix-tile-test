@@ -1,7 +1,7 @@
 #!/bin/bash
 mkdir /data1/voltageScan_4hr
 cd /data1/voltageScan_4hr
-mkdir baseline-67500mV
+mkdir baseline-69500mV
 
 #initialize all channels to same voltage for beginning of test and take baseline test 
 curl -X POST 192.168.10.213/api/hardware/modules/2/set-voltage?voltage=69.5
@@ -14,8 +14,7 @@ curl -X POST 192.168.10.213/api/hardware/modules/14/set-voltage?voltage=69.5
 echo
 ~/drsLog/drsLog 5.0 0.45 60.0 R AND 11110 0.05 0.05 0.05 0.05 1000000 14400 ./baseline-69500mV > baseline-69500mV/drs4.log
 
-#set voltage change in between runs
-voltDiff=0.1			    
+			    
 
 
 for i in {1..4}
