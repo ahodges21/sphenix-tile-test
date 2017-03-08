@@ -79,7 +79,7 @@ void decode(char* filename, int usr_duration);
 time_t printEvent(EHEADER eh);
 
 // Main function, should be named after filename
-void voltageScan(const char* filename, int usr_duration) {
+void timeDiff(const char* filename, int usr_duration) {
   decode((char*)filename, usr_duration);
 }
 
