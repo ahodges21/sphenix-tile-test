@@ -27,8 +27,5 @@ do
 done
 
 
-#for chan in {1..4}
-#do
-    
-#    root -l -q '
+
 

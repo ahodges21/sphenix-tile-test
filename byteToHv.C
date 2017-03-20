@@ -31,7 +31,7 @@ int byteToHv(double byte, int channel)
     {
       double volt;
       volt = coeff[channel-1][0]*byte + coeff[channel-1][1];
-      cout << "The voltage attained by setting the byte to " << byte << " is " << volt << " volts +/- 0.0058%" << endl;
+      cout << "The voltage attained by setting the byte to " << byte << " is " << volt << " volts." << endl;
     }
   else
     {
